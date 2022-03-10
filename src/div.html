@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>无刷新显示内容</title>
+
+    <style>
+        #text-demo{
+            width:200px;
+            height: 100px;
+            border: solid 1px #90b;
+            margin-top: 10px;
+        }
+        #mouseover{
+            width:200px;
+            height: 100px;
+            border: solid 1px saddlebrown;
+            margin-top: 10px;
+        }
+        #keyboard{
+            width:200px;
+            height: 100px;
+            border: solid 1px hotpink;
+            margin-top: 10px;
+        }
+        #json{
+            width:200px;
+            height: 100px;
+            border: solid 1px darkorange;
+            margin-top: 10px;
+        }
+        #ie{
+            width:200px;
+            height: 100px;
+            border: solid 1px green;
+            margin-top: 10px;
+        }
+        #delay{
+            width:200px;
+            height: 100px;
+            border: solid 1px navajowhite;
+            margin-top: 10px;
+        }
+        #dup{
+            width:200px;
+            height: 100px;
+            border: solid 1px blue;
+            margin-top: 10px;
+        }
+        #JQuery-Ajax{
+            width:800px;
+            height: 200px;
+            border: solid 1px goldenrod;
+        }
+        #JQuery-Ajax>div:first-child{
+            width:200px;
+            height: 200px;
+            border: solid 1px goldenrod;
+            float: left;
+        }
+        #JQuery-Ajax>div:nth-child(2){
+            width:200px;
+            height: 200px;
+            border: solid 1px goldenrod;
+            float: left;
+            margin-left: 20px;
+            margin-right: 20px;
+        }
+        #JQuery-Ajax>div:nth-child(3){
+            width:200px;
+            height: 200px;
+            border: solid 1px goldenrod;
+            float: left;
+        }
+        #Get{
+            width:200px;
+            height: 100px;
+            border: solid 1px red;
+            margin-top: 10px;
+        }
+        #Post{
+            width:200px;
+            height: 100px;
+            border: solid 1px green;
+            margin-top: 10px;
+        }
+        #General{
+            width:200px;
+            height: 100px;
+            border: solid 1px blue;
+            margin-top: 10px;
+        }
+        iframe{
+            width: 800px;
+            height: 600px;
+
+
+        }
+
+
+    </style>
+
+</head>
+<body>
+    <button type="button" id="btn">点击发送</button>
+    <div id = text-demo></div>
+    <p>鼠标悬停</p>
+    <div id="mouseover"></div>
+    <p>键盘在任意位置按下</p>
+    <div id="keyboard"></div>
+    <br>
+    <button type="button">处理json</button>
+    <div id="json"></div>
+    <br>
+    <button type="button">处理ie缓存问题,Chrome不用管</button>
+    <div id="ie"></div>
+    <br>
+    <button type="button">延时响应</button>
+    <div id="delay"></div>
+    <br>
+    <button type="button">处理重复请求</button>
+    <div id="dup"></div>
+    <br>
+    <div id="JQuery-Ajax">
+        <div>
+            <button>Get请求</button>
+            <div id="Get"></div>
+        </div>
+        <div>
+            <button>Post请求</button>
+            <div id="Post"></div>
+        </div>
+        <div>
+            <button>通用方法</button>
+            <div id="General"></div>
+        </div>
+    </div>
+    <br>
+    <iframe src="//player.bilibili.com/player.html?aid=682030755&bvid=BV14U4y1f7Bd&cid=542626473&page=1"
+            scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>
+    <br>
+    <audio src="http://4885d59y69.wicp.vip/english.mp3" controls></audio>
+</body>
+
+<!--引入js-->
+<script crossorigin="anonymous" type="text/javascript" src="express基本使用.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script crossorigin="anonymous" type="text/javascript">
+    //选择按钮
+    const btn = document.getElementById("btn");
+    const result = document.getElementById("text-demo");
+    let xhr = new XMLHttpRequest();
+    //为按钮绑定 点击事件
+    btn.onclick=function (){
+        //创建XMLHttpRequest对象
+        xhr.open('Get',"Http://127.0.0.1:8000/server?a=100&b=200&c=300");
+        xhr.send();
+        xhr.onreadystatechange=function (){
+            if (xhr.readyState === 4){
+                if(xhr.status >= 200 && xhr.status < 300){
+                    console.log(xhr.status);
+                    console.log(xhr.statusText);
+                    console.log(xhr.getAllResponseHeaders());
+                    console.log(xhr.response);
+
+                    result.innerHTML = xhr.response;
+                }else{
+
+                }
+            }
+
+        }
+    }
+
+    //为按钮绑定"鼠标悬停事件"
+    const mouseover = document.getElementById("mouseover");
+    mouseover.addEventListener("mouseover",function(){
+        // console.log("test");
+        //检查js文件有没有准备post
+        xhr.open("Post",'http://127.0.0.1:8000/test');
+        //设置请求头
+        xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+        //自定义请求头设置 配置 js文件  "Access-Control-Allow-Headers"  必须使用app.all()
+        xhr.setRequestHeader('name','jiang');//找到错误了, 可能原因是 get 和 post 分开时 , 调用任意一个都出错
+        // xhr.send();
+        //为post请求设置请求体
+        xhr.send("a=10&b=20&c=30");
+        //xhr的准备状态函数
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState === 4){
+                if(xhr.status >= 200 && xhr.status < 300 ){
+                    mouseover.innerHTML = xhr.response;
+                }
+            }
+        }
+    })
+
+    //当键盘按下时 , 显示 回调内容
+    const keyboard = document.getElementById("keyboard");
+    //用keyboard.onkeydown 不行 , 没反应
+    window.onkeydown = function(){
+       xhr = new XMLHttpRequest();
+       xhr.open("post","http://127.0.0.1:8000/keyboard");
+       xhr.send();
+       xhr.onreadystatechange = function(){
+           if(xhr.readyState === 4){
+               if(xhr.status >= 200 && xhr.status < 300){
+                   keyboard.innerHTML=xhr.response;
+               }
+           }
+       }
+    }
+
+
+    //事件名一定要写对
+    //当键盘松开时 , 显示 回调内容
+    window.addEventListener("keyup",function(){
+        xhr = new XMLHttpRequest();
+        xhr.open("post","http://127.0.0.1:8000/keyup");
+        xhr.send();
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState === 4){
+                if(xhr.status >= 200 && xhr.status < 300){
+                    keyboard.innerHTML=xhr.response;
+                }
+            }
+        }
+    })
+
+    //响应json数据
+    const btns = document.querySelectorAll("button");
+    const json = document.getElementById("json");
+    btns[1].addEventListener("mousedown",function(){
+        xhr = new  XMLHttpRequest();
+        xhr.open("post","http://127.0.0.1:8000/json");
+        xhr.send();
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState === 4){
+                if(xhr.status >= 200 && xhr.status < 300){
+                    json.innerHTML = xhr.response;
+                    console.log(xhr.response);
+                    console.log(typeof xhr.response); // string
+                    //将string 转换成 json
+                    let data = JSON.parse(xhr.response);
+                    console.log(data);
+                    console.log(typeof data);
+                    //获取json对象的属性 用"."
+                    json.innerHTML = "name="+data.name + " "+ "age="+data.age;
+                }
+            }
+        }
+    })
+    //IE浏览器缓存问题 , 处理IE ,现在的 Microsoft Edge 没问题
+    const ie = document.getElementById("ie");
+    btns[2].addEventListener("mousedown",function(){
+        xhr = new XMLHttpRequest();
+        xhr.open("post","http://127.0.0.1:8000/ie?t="+Date.now());
+        xhr.send();
+        xhr.onreadystatechange = function (){
+            if(xhr.readyState === 4){
+                if(xhr.status >=200 && xhr.status < 300){
+                    ie.innerHTML = xhr.response;
+                }
+            }
+        }
+    });
+
+    //延时响应
+    const delay = document.getElementById("delay");
+    btns[3].addEventListener("mousedown",function(){
+        xhr = new XMLHttpRequest();
+        xhr.open("post","http://127.0.0.1:8000/delay");
+        //设置时延期限
+        xhr.timeout = 4000;
+        xhr.ontimeout = function(){
+            //一旦走近这个函数 , 往下 不执行
+            alert("网络异常 , 请稍后重试 !");
+        }
+        //网络异常时
+        xhr.onerror = function(){
+            alert("你的网络似乎开小差了...");
+        }
+        //取消请求
+        console.log("即将取消请求...");
+        xhr.send();
+        xhr.abort(); //取消请求应放在发送请求之后
+        console.log("取消请求失败...");
+        xhr.onreadystatechange = function (){
+            if(xhr.readyState === 4){
+                if(xhr.status >=200 && xhr.status < 300){
+                    delay.innerHTML = xhr.response;
+                }
+            }
+        }
+    });
+
+    //处理重复请求 , 同一个元素 只能显示一次
+    let isSending = false ;
+    btns[4].addEventListener("mousedown",function (){
+        xhr = new XMLHttpRequest();
+        xhr.open("post","http://127.0.0.1:8000/dup");
+        xhr.send();
+        if(isSending === true) xhr.abort();
+        xhr.onreadystatechange = function (){
+            if(xhr.readyState === 4){
+                if(xhr.status >= 200 && xhr.status <300){
+                    isSending = true ;
+                }
+            }
+        }
+    })
+
+
+
+    //Get==第6个按钮
+    $("button").eq(5).click(function (){
+        this.style.backgroundColor = "slateblue";
+        this.style.border = "1px solid slateblue";
+        this.style.color = "white";
+        this.style.borderRadius = "8px";
+        //发送Get请求, data是response的数据
+        $.get('http://127.0.0.1:8000/jquery-get',{a:100 , b:200},function (data){
+            // console.log(data);
+            $("#Get").html(data);
+        })
+    })
+
+    //Post==第7个按钮
+    $("button").eq(6).click(function (){
+        this.style.backgroundColor = "orangered";
+        this.style.border = "1px solid orangered";
+        this.style.color = "white";
+        this.style.borderRadius = "8px";
+        //发送Post请求, data是response的数据
+        $.post('http://127.0.0.1:8000/jquery-post',{a:100 , b:200},function (data){
+            // console.log(data);
+            $("#Post").html(data);
+        })
+    })
+
+    //General==第8个按钮
+    $("button").eq(7).click(function (){
+        this.style.backgroundColor = "cyan";
+        this.style.border = "1px solid cyan";
+        this.style.color = "white";
+        this.style.borderRadius = "8px";
+        //发送通用请求, data是response的数据
+        $.ajax({
+            //url
+            url:"http://127.0.0.1:8000/jquery-general",
+            //参数
+            data:{a:100 , b:200},
+            //请求类型
+            type: "POST",
+            //返回类型
+            dataType : 'JSON',
+            //成功回调
+            success:function(data){
+                console.log(data);
+                console.log(typeof data);
+                let str = JSON.stringify(data);
+                $("#General").html("string: "+str+"\n"+"object: "+data.name+" "+data.age);
+            }
+        });
+    })
+
+
+
+
+
+
+</script>
+</html>

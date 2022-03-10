@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>操作演示盒子模型</title>
+  <style>
+    #box{
+      width: 600px;
+      height: 600px;
+      background-color: deeppink;
+    }
+    #box>div:nth-child(1){
+      width: 200px;
+      height: 200px;
+      background-color: blue;
+      float: left;
+      /*visibility: hidden;*/
+    }
+    #box>div:nth-child(2){
+      width: 200px;
+      height: 200px;
+      background-color: red;
+      float: left;
+    }
+    #box>div:nth-child(3){
+      width: 200px;
+      height: 200px;
+      background-color: green;
+      float: left;
+      /*visibility: hidden;*/
+    }
+    #box>div:nth-child(4){
+      width: 200px;
+      height: 200px;
+      background-color: yellow;
+      float: left;
+    }
+    #box>div:nth-child(5){
+      width: 200px;
+      height: 200px;
+      background-color: cornflowerblue;
+      float: left;
+    }
+  </style>
+</head>
+<body>
+  <div id="box">
+    <div>顶部元素</div>
+    <div>左部元素</div>
+    <div>当前元素</div>
+    <div>右侧元素</div>
+    <div>底部元素</div>
+  </div>
+</body>
+</html>

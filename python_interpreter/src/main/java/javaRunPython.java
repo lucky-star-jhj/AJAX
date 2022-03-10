@@ -16,6 +16,7 @@ public class javaRunPython {
         proc=Runtime.getRuntime().exec(args1);
         System.out.println("Hello my 2 commit ! ");
         System.out.println("Hello my 3 commit ! ");
+        System.out.println("Hello my 5 commit ! ");
 
 
         //这里注意乱码
